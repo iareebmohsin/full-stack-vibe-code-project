@@ -1,0 +1,26 @@
+{
+  "name": "full-stack-starter-kit-https",
+  "version": "1.0.0",
+  "description": "Full stack docker env project",
+  "homepage": "https://bitbucket.org/softartltd/full-stack-starter-kit#readme",
+  "bugs": {
+    "url": "https://bitbucket.org/softartltd/full-stack-starter-kit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/softartltd/full-stack-starter-kit.git"
+  },
+  "license": "ISC",
+  "author": "Diana Ratcheva",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "mcp": "node backend/mcp-server.js"
+  },
+  "dependencies": {
+    "@contextprompt/completions-sdk": "^0.1.1",
+    "@modelcontextprotocol/sdk": "^1.19.1",
+    "universal-mcp-client": "^1.2.0"
+  }
+}

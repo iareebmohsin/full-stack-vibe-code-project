@@ -1,0 +1,20 @@
+{
+    "mcpServers": {
+      "ai-tools": {
+        "command": "node",
+        "args": ["backend/mcp-server.js"],
+        "env": {
+          "PORT": "5055"
+        }
+      },
+      "filesystem": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
+      },
+      "github": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/github-mcp"]
+      }
+    }
+  }
+  

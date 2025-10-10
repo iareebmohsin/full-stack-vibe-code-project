@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose exec:*)"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "enabledMcpjsonServers": [
+    "ai-tools",
+    "filesystem",
+    "github"
+  ],
+  "enableAllProjectMcpServers": true
+}

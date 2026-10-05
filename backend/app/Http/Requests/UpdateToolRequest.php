@@ -99,6 +99,17 @@ class UpdateToolRequest extends FormRequest
                 Rule::exists('tags', 'id'),
             ],
 
+            // Roles (the controller syncs these, so they must pass validation)
+            'roles' => [
+                'sometimes',
+                'array',
+                'min:1',
+            ],
+            'roles.*' => [
+                'string',
+                Rule::in(['owner', 'backend', 'frontend', 'designer', 'devops', 'data-scientist', 'qa']),
+            ],
+
             // Featured flag (only owners can set)
             'is_featured' => [
                 'sometimes',

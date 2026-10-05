@@ -27,20 +27,20 @@ class UserSeeder extends Seeder
         // Create sample users
         $users = [
             [
-                'name' => 'Ivan Ivanov',
-                'email' => 'ivan@admin.local',
+                'name' => 'Areeb',
+                'email' => 'areebmhsn@gmail.com',
                 'password' => Hash::make('password'),
                 'role' => 'owner',
             ],
             [
-                'name' => 'Elena Petrova',
-                'email' => 'elena@frontend.local',
+                'name' => 'Maya Chen',
+                'email' => 'maya@loadout.test',
                 'password' => Hash::make('password'),
                 'role' => 'frontend',
             ],
             [
-                'name' => 'Petar Georgiev',
-                'email' => 'petar@backend.local',
+                'name' => 'Omar Haddad',
+                'email' => 'omar@loadout.test',
                 'password' => Hash::make('password'),
                 'role' => 'backend',
             ],
@@ -52,8 +52,8 @@ class UserSeeder extends Seeder
 
         $this->command->info('Sample users created successfully!');
         $this->command->info('You can now login with:');
-        $this->command->info('  - ivan@admin.local / password (Owner)');
-        $this->command->info('  - elena@frontend.local / password (Frontend)');
-        $this->command->info('  - petar@backend.local / password (Backend)');
+        $this->command->info('  - areebmhsn@gmail.com / password (Owner)');
+        $this->command->info('  - maya@loadout.test / password (Frontend)');
+        $this->command->info('  - omar@loadout.test / password (Backend)');
     }
 }

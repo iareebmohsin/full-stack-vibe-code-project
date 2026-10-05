@@ -37,6 +37,24 @@ class AuthController extends Controller
             ]);
         }
 
+        // Local demo switch: TWO_FACTOR_ENABLED=false skips the emailed code
+        if (!config('app.two_factor_enabled')) {
+            $user->tokens()->delete();
+            $token = $user->createToken('auth-token')->plainTextToken;
+
+            return response()->json([
+                'success' => true,
+                'requires_2fa' => false,
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role,
+                ],
+                'token' => $token,
+            ]);
+        }
+
         // Generate 6-digit 2FA code
         $code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 

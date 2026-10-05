@@ -15,6 +15,9 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    // Emailed sign-in code as a second step. Set TWO_FACTOR_ENABLED=false to skip it locally.
+    'two_factor_enabled' => (bool) env('TWO_FACTOR_ENABLED', true),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

@@ -20,7 +20,7 @@ class ToolController extends Controller
 
         // Only show published tools for non-admin users
         // Admins (owners) can see all tools regardless of status
-        if (!auth()->check() || auth()->user()->role !== 'owner') {
+        if (!auth('sanctum')->check() || auth('sanctum')->user()->role !== 'owner') {
             $query->published();
         }
 
@@ -65,11 +65,11 @@ class ToolController extends Controller
         }
 
         // Order by published_at for public, or by created_at for admins (to include drafts)
-        $orderColumn = (auth()->check() && auth()->user()->role === 'owner') ? 'created_at' : 'published_at';
+        $orderColumn = (auth('sanctum')->check() && auth('sanctum')->user()->role === 'owner') ? 'created_at' : 'published_at';
         $tools = $query->latest($orderColumn)->paginate(15);
 
         // Append roles and favorite status to each tool
-        $userId = auth()->id();
+        $userId = auth('sanctum')->id();
         $tools->getCollection()->transform(function ($tool) use ($userId) {
             $tool->roles_list = $tool->roles;
 
@@ -153,7 +153,7 @@ class ToolController extends Controller
         $tool->roles_list = $tool->roles;
 
         // Check if user has favorited this tool
-        $userId = auth()->id();
+        $userId = auth('sanctum')->id();
         if ($userId) {
             $tool->is_favorited = \App\Models\Favorite::where('user_id', $userId)
                 ->where('tool_id', $tool->id)

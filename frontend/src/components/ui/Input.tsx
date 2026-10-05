@@ -1,193 +1,122 @@
-import React from 'react';
+import React, { useId } from 'react';
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+type FieldExtras = {
   label?: string;
   error?: string;
   helperText?: string;
   fullWidth?: boolean;
+  required?: boolean;
+};
+
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & FieldExtras;
+export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & FieldExtras;
+export type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & FieldExtras & { children: React.ReactNode };
+
+export const fieldClass = (error?: string) =>
+  `w-full rounded-xl border bg-white px-3.5 text-[15px] text-ink transition-colors focus:outline-none focus:ring-4 ${
+    error ? 'border-[#c0392b] focus:ring-[#c0392b]/15' : 'border-line hover:border-ink/30 focus:border-ink focus:ring-ember/15'
+  }`;
+
+function Shell({
+  id,
+  label,
+  error,
+  helperText,
+  required,
+  children,
+}: FieldExtras & { id: string; children: React.ReactNode }) {
+  return (
+    <div className="w-full">
+      {label && (
+        <label htmlFor={id} className="mb-1.5 flex items-center gap-1 text-[13px] font-semibold text-ink-soft">
+          {label}
+          {required && <span className="text-ember">*</span>}
+        </label>
+      )}
+      {children}
+      {error ? (
+        <p id={`${id}-error`} role="alert" className="mt-1.5 text-[13px] text-[#b3261e]">
+          {error}
+        </p>
+      ) : helperText ? (
+        <p className="mt-1.5 text-[13px] text-mute">{helperText}</p>
+      ) : null}
+    </div>
+  );
 }
 
-export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label?: string;
-  error?: string;
-  helperText?: string;
-  fullWidth?: boolean;
-}
-
-export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  label?: string;
-  error?: string;
-  helperText?: string;
-  fullWidth?: boolean;
-  children: React.ReactNode;
-}
-
-/**
- * Input Component
- *
- * A fully accessible text input with label, error states, and helper text.
- * Supports all standard HTML input attributes.
- *
- * @example
- * <Input
- *   label="Email"
- *   type="email"
- *   placeholder="Enter your email"
- *   error={errors.email}
- *   helperText="We'll never share your email"
- * />
- */
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, helperText, fullWidth = false, className = '', id, ...props }, ref) => {
-    // Generate ID if not provided
-    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
-
-    // Base input styles - Dark theme
-    const baseStyles = 'px-4 py-2 border rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-[#1a1a1a] text-white placeholder-gray-500';
-
-    // Error state styles
-    const errorStyles = error
-      ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500'
-      : 'border-[#333333] focus:border-blue-500 focus:ring-blue-500';
-
-    // Width styles
-    const widthStyles = fullWidth ? 'w-full' : '';
-
-    const inputStyles = `${baseStyles} ${errorStyles} ${widthStyles} ${className}`;
-
+  ({ label, error, helperText, fullWidth: _fw, required, className = '', id, ...props }, ref) => {
+    const auto = useId();
+    const fid = id || auto;
+    void _fw;
     return (
-      <div className={fullWidth ? 'w-full' : ''}>
-        {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-gray-300 mb-1">
-            {label}
-          </label>
-        )}
+      <Shell id={fid} label={label} error={error} helperText={helperText} required={required}>
         <input
           ref={ref}
-          id={inputId}
-          className={inputStyles}
+          id={fid}
           aria-invalid={error ? 'true' : 'false'}
-          aria-describedby={error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined}
+          className={`${fieldClass(error)} h-11 ${className}`}
           {...props}
         />
-        {error && (
-          <p id={`${inputId}-error`} className="mt-1 text-sm text-rose-600" role="alert">
-            {error}
-          </p>
-        )}
-        {!error && helperText && (
-          <p id={`${inputId}-helper`} className="mt-1 text-sm text-slate-500">
-            {helperText}
-          </p>
-        )}
-      </div>
+      </Shell>
     );
   }
 );
-
 Input.displayName = 'Input';
 
-/**
- * Textarea Component
- *
- * A fully accessible textarea with label, error states, and helper text.
- */
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ label, error, helperText, fullWidth = false, className = '', id, rows = 4, ...props }, ref) => {
-    const textareaId = id || `textarea-${Math.random().toString(36).substr(2, 9)}`;
-
-    const baseStyles = 'px-4 py-2 border rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 resize-y bg-[#1a1a1a] text-white placeholder-gray-500';
-
-    const errorStyles = error
-      ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500'
-      : 'border-[#333333] focus:border-blue-500 focus:ring-blue-500';
-
-    const widthStyles = fullWidth ? 'w-full' : '';
-
-    const textareaStyles = `${baseStyles} ${errorStyles} ${widthStyles} ${className}`;
-
+  ({ label, error, helperText, fullWidth: _fw, required, className = '', id, rows = 4, ...props }, ref) => {
+    const auto = useId();
+    const fid = id || auto;
+    void _fw;
     return (
-      <div className={fullWidth ? 'w-full' : ''}>
-        {label && (
-          <label htmlFor={textareaId} className="block text-sm font-medium text-gray-300 mb-1">
-            {label}
-          </label>
-        )}
+      <Shell id={fid} label={label} error={error} helperText={helperText} required={required}>
         <textarea
           ref={ref}
-          id={textareaId}
+          id={fid}
           rows={rows}
-          className={textareaStyles}
           aria-invalid={error ? 'true' : 'false'}
-          aria-describedby={error ? `${textareaId}-error` : helperText ? `${textareaId}-helper` : undefined}
+          className={`${fieldClass(error)} resize-y py-3 leading-relaxed ${className}`}
           {...props}
         />
-        {error && (
-          <p id={`${textareaId}-error`} className="mt-1 text-sm text-rose-600" role="alert">
-            {error}
-          </p>
-        )}
-        {!error && helperText && (
-          <p id={`${textareaId}-helper`} className="mt-1 text-sm text-slate-500">
-            {helperText}
-          </p>
-        )}
-      </div>
+      </Shell>
     );
   }
 );
-
 Textarea.displayName = 'Textarea';
 
-/**
- * Select Component
- *
- * A fully accessible select dropdown with label, error states, and helper text.
- */
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, error, helperText, fullWidth = false, className = '', id, children, ...props }, ref) => {
-    const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
-
-    const baseStyles = 'px-4 py-2 border rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-[#1a1a1a] text-white';
-
-    const errorStyles = error
-      ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500'
-      : 'border-[#333333] focus:border-blue-500 focus:ring-blue-500';
-
-    const widthStyles = fullWidth ? 'w-full' : '';
-
-    const selectStyles = `${baseStyles} ${errorStyles} ${widthStyles} ${className}`;
-
+  ({ label, error, helperText, fullWidth: _fw, required, className = '', id, children, ...props }, ref) => {
+    const auto = useId();
+    const fid = id || auto;
+    void _fw;
     return (
-      <div className={fullWidth ? 'w-full' : ''}>
-        {label && (
-          <label htmlFor={selectId} className="block text-sm font-medium text-gray-300 mb-1">
-            {label}
-          </label>
-        )}
-        <select
-          ref={ref}
-          id={selectId}
-          className={selectStyles}
-          aria-invalid={error ? 'true' : 'false'}
-          aria-describedby={error ? `${selectId}-error` : helperText ? `${selectId}-helper` : undefined}
-          {...props}
-        >
-          {children}
-        </select>
-        {error && (
-          <p id={`${selectId}-error`} className="mt-1 text-sm text-rose-600" role="alert">
-            {error}
-          </p>
-        )}
-        {!error && helperText && (
-          <p id={`${selectId}-helper`} className="mt-1 text-sm text-slate-500">
-            {helperText}
-          </p>
-        )}
-      </div>
+      <Shell id={fid} label={label} error={error} helperText={helperText} required={required}>
+        <div className="relative">
+          <select
+            ref={ref}
+            id={fid}
+            aria-invalid={error ? 'true' : 'false'}
+            className={`${fieldClass(error)} h-11 appearance-none pr-10 ${className}`}
+            {...props}
+          >
+            {children}
+          </select>
+          <svg
+            className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-mute"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </div>
+      </Shell>
     );
   }
 );
-
 Select.displayName = 'Select';

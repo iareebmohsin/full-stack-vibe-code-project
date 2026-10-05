@@ -1,8 +1,7 @@
 import React from 'react';
 
-export interface CardProps {
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  className?: string;
   hoverable?: boolean;
   padding?: 'none' | 'sm' | 'md' | 'lg';
 }
@@ -11,84 +10,30 @@ export interface CardHeaderProps {
   children: React.ReactNode;
   className?: string;
 }
+export type CardBodyProps = CardHeaderProps;
+export type CardFooterProps = CardHeaderProps;
 
-export interface CardBodyProps {
-  children: React.ReactNode;
-  className?: string;
-}
+const PAD = { none: '', sm: 'p-4', md: 'p-5 sm:p-6', lg: 'p-6 sm:p-8' };
 
-export interface CardFooterProps {
-  children: React.ReactNode;
-  className?: string;
-}
+export const Card: React.FC<CardProps> = ({ children, className = '', hoverable = false, padding = 'md', ...rest }) => (
+  <div
+    className={`rounded-[var(--radius-card)] border border-line bg-paper ${
+      hoverable ? 'transition-all duration-200 hover:-translate-y-0.5 hover:border-ink/30 hover:shadow-[0_10px_30px_-18px_rgba(23,34,27,0.45)]' : ''
+    } ${PAD[padding]} ${className}`}
+    {...rest}
+  >
+    {children}
+  </div>
+);
 
-/**
- * Card Component
- *
- * A flexible card container with optional hover effects and customizable padding.
- * Supports composition with CardHeader, CardBody, and CardFooter sub-components.
- *
- * @example
- * <Card hoverable>
- *   <CardHeader>
- *     <h3>Card Title</h3>
- *   </CardHeader>
- *   <CardBody>
- *     <p>Card content</p>
- *   </CardBody>
- *   <CardFooter>
- *     <Button>Action</Button>
- *   </CardFooter>
- * </Card>
- */
-export const Card: React.FC<CardProps> = ({
-  children,
-  className = '',
-  hoverable = false,
-  padding = 'md',
-}) => {
-  // Base styles - Dark theme
-  const baseStyles = 'bg-[#1a1a1a] rounded-lg border border-[#2a2a2a] transition-shadow duration-200';
+export const CardHeader: React.FC<CardHeaderProps> = ({ children, className = '' }) => (
+  <div className={`mb-4 ${className}`}>{children}</div>
+);
 
-  // Hover effect
-  const hoverStyles = hoverable ? 'shadow-sm shadow-black/50 hover:shadow-md hover:shadow-black/50 cursor-pointer' : 'shadow-sm shadow-black/50';
+export const CardBody: React.FC<CardBodyProps> = ({ children, className = '' }) => (
+  <div className={className}>{children}</div>
+);
 
-  // Padding styles
-  const paddingStyles = {
-    none: '',
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8',
-  };
-
-  const cardStyles = `${baseStyles} ${hoverStyles} ${paddingStyles[padding]} ${className}`;
-
-  return <div className={cardStyles}>{children}</div>;
-};
-
-/**
- * CardHeader Component
- *
- * Header section of a card, typically contains title and optional actions.
- */
-export const CardHeader: React.FC<CardHeaderProps> = ({ children, className = '' }) => {
-  return <div className={`mb-4 ${className}`}>{children}</div>;
-};
-
-/**
- * CardBody Component
- *
- * Main content area of a card.
- */
-export const CardBody: React.FC<CardBodyProps> = ({ children, className = '' }) => {
-  return <div className={`${className}`}>{children}</div>;
-};
-
-/**
- * CardFooter Component
- *
- * Footer section of a card, typically contains actions or metadata.
- */
-export const CardFooter: React.FC<CardFooterProps> = ({ children, className = '' }) => {
-  return <div className={`mt-4 pt-4 border-t border-[#2a2a2a] ${className}`}>{children}</div>;
-};
+export const CardFooter: React.FC<CardFooterProps> = ({ children, className = '' }) => (
+  <div className={`mt-4 border-t border-line pt-4 ${className}`}>{children}</div>
+);

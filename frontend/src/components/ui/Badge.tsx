@@ -5,45 +5,30 @@ export interface BadgeProps {
   variant?: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
   size?: 'sm' | 'md' | 'lg';
   className?: string;
+  style?: React.CSSProperties;
 }
 
-/**
- * Badge Component
- *
- * A small status indicator or label component with multiple color variants.
- * Perfect for tags, categories, status labels, and counts.
- *
- * @example
- * <Badge variant="success">Active</Badge>
- * <Badge variant="primary">New</Badge>
- */
-export const Badge: React.FC<BadgeProps> = ({
-  children,
-  variant = 'default',
-  size = 'md',
-  className = '',
-}) => {
-  // Base styles
-  const baseStyles = 'inline-flex items-center font-medium rounded-full';
-
-  // Variant styles
-  const variantStyles = {
-    default: 'bg-slate-100 text-slate-700',
-    primary: 'bg-indigo-100 text-indigo-700',
-    success: 'bg-emerald-100 text-emerald-700',
-    warning: 'bg-amber-100 text-amber-700',
-    danger: 'bg-rose-100 text-rose-700',
-    info: 'bg-sky-100 text-sky-700',
-  };
-
-  // Size styles
-  const sizeStyles = {
-    sm: 'px-2 py-0.5 text-xs',
-    md: 'px-2.5 py-0.5 text-sm',
-    lg: 'px-3 py-1 text-base',
-  };
-
-  const badgeStyles = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
-
-  return <span className={badgeStyles}>{children}</span>;
+const VARIANTS = {
+  default: 'bg-sage-deep text-ink-soft',
+  primary: 'bg-ink text-paper',
+  success: 'bg-moss text-forest',
+  warning: 'bg-butter text-[#6b5412]',
+  danger: 'bg-rosy text-[#8a2a20]',
+  info: 'bg-sky text-[#244a6b]',
 };
+
+const SIZES = {
+  sm: 'h-5 px-2 text-[11px]',
+  md: 'h-6 px-2.5 text-xs',
+  lg: 'h-7 px-3 text-[13px]',
+};
+
+/** Squared chip with a mono label, used for status and taxonomy. */
+export const Badge: React.FC<BadgeProps> = ({ children, variant = 'default', size = 'md', className = '', style }) => (
+  <span
+    style={style}
+    className={`inline-flex items-center gap-1 whitespace-nowrap rounded-md font-mono font-medium uppercase tracking-[0.04em] ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+  >
+    {children}
+  </span>
+);
